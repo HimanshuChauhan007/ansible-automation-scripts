@@ -1,0 +1,11 @@
+---
+ - hosts: VNC
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks:
+    - name: installing package
+      yum:
+       name: xorg-x11-fonts-*
+       state: present
+...

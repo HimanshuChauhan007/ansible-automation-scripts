@@ -1,0 +1,30 @@
+---
+ - hosts: all
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks:
+     - name: lineadd
+       lineinfile:
+         create: yes
+         backup: yes
+         path: /etc/ssh/sshd_config
+         line: "{{ item.line }}"
+       with_items:
+         - { line: '#####X11 Forwarding##### ' }
+         - { line: 'X11Forwarding yes ' }
+         - { line: 'X11DisplayOffset 10 ' }
+         - { line: 'X11UseLocalhost no ' }
+     - name: install Specific Package
+       yum:
+         name:
+           - xorg-x11-apps*
+           - xorg-x11-server-Xorg
+           - xorg-x11-xauth
+           - xorg-x11-fonts-*
+     - name: Remove VNC
+       yum:
+         name:
+           - libvncserver*
+           - tiger*
+         state: absent

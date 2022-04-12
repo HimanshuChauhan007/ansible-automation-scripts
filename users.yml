@@ -1,0 +1,30 @@
+---
+- hosts: USERS
+  connection: ssh
+  become: yes
+  become_method: sudo
+  vars:
+   users:
+   - username: adm-ansmeera
+   - username: adm-anikuchi
+   - username: adm-codfrasi
+   - username: adm-phikeith
+   - username: adm-vaipotnu
+   - username: adm-marmendo4
+   - username: adm-anibhago  
+  tasks:
+
+   - name: adding user
+     user:
+      name: "{{ item.username }}"
+      password: $6$Kw/lN0P/VEbT8Grl$nbzsdVudUVk2SBUVhdFxKPh6JVm6W5RsuUztWjTLnTuOhLQSxTucppaPpdDq30PwWDp2Qo7FqXjxyVA.OonvQ/
+      state: present
+      shell: /bin/bash
+      createhome: yes
+      system: no
+     with_items: "{{ users }}"
+
+   - name: Password Policy
+     command: 'chage -M 9000 -W 7 -d 0 "{{ item.username }}"'
+     with_items: "{{ users }}"
+...

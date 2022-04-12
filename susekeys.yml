@@ -1,0 +1,16 @@
+---
+ - hosts: SUSEMANAGER
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks:
+     - name: Key Replace
+       replace: 
+         path: /etc/salt/minion.d/susemanager.conf
+         regexp: '1-rhel7-x86_64'
+         replace: '1-rhel7_monthly'
+         backup: yes
+     - name: SaltMinion Restart
+       service: 
+         name: salt-minion
+         state: restarted

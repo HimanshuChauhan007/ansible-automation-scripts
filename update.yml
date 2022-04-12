@@ -1,0 +1,7 @@
+- hosts: dev-rhel7
+  connection: ssh
+  remote_user: root
+  gather_facts: yes
+  tasks:
+    - name: update all packages available 
+      yum: name="*" security=yes state=latest

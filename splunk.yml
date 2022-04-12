@@ -1,0 +1,24 @@
+---
+  - hosts: all
+    connection: ssh
+    remote_user: sysops
+    become: true
+    tasks: 
+      - name: Stop Splunk 
+        command: ' /opt/splunkforwarder/bin/splunk stop'
+        ignore_errors: yes
+      - name: Old Splunk Forwader Removal 
+        file:
+          path: /opt/splunkforwarder
+          state: absent
+      - name: Copy New Splunk 
+        copy:
+          src: /home/sysops/splunkforwarder_EDC_NEW_DMZ/
+          dest: /opt/
+          owner: root
+          group: root
+          mode: preserve
+      - name: start splunk
+        command: /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt
+      - name: Enable boot start 
+        command: /opt/splunkforwarder/bin/splunk enable boot-start

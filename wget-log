@@ -1,0 +1,11 @@
+--2021-08-18 08:30:35--  https://glpi.publicisgroupe.net/agent/getconfig.php?country=India
+Resolving glpi.publicisgroupe.net (glpi.publicisgroupe.net)... 10.196.4.70
+Connecting to glpi.publicisgroupe.net (glpi.publicisgroupe.net)|10.196.4.70|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1696 (1.7K) [text/plain]
+Saving to: ‘getconfig.php?country=India’
+
+getconfig.php?country=India                 0%[                                                                                      ]       0  --.-KB/s               getconfig.php?country=India               100%[=====================================================================================>]   1.66K  --.-KB/s    in 0s      
+
+2021-08-18 08:30:36 (18.5 MB/s) - ‘getconfig.php?country=India’ saved [1696/1696]
+

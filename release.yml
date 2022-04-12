@@ -1,0 +1,11 @@
+---
+  - hosts: all
+    connection: ssh
+    become: yes
+    tasks:
+       - name: Check release
+         command: cat /etc/redhat-release
+         register: release
+  
+       - debug:
+           var: release.stdout

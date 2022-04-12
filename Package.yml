@@ -1,0 +1,12 @@
+---
+- hosts: EPELREPO
+  connection: ssh
+  remote_user: sysops
+  become: true
+  tasks: 
+    - name: Removal of VNC Package
+      yum: 
+        name: 
+          - libvncserver*
+          - tiger*
+        state: absent

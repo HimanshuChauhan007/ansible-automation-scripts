@@ -1,0 +1,46 @@
+---
+  - hosts: all
+    remote_user: sysops
+    become: true
+
+    tasks:
+        - name: Copy RPM for CentOS/RHEL 6
+          copy:
+                  src: /home/sysops/falcon/falcon-sensor-6.19.0-11610.el6.x86_64.rpm
+                  dest: /home/sysops/falcon-sensor.rpm
+          when: ansible_distribution_major_version == "6"
+
+        - name: Copy RPM for CentOS/RHEL 7
+          copy:
+                  src: /home/sysops/falcon/falcon-sensor-6.19.0-11610.el7.x86_64.rpm
+                  dest: /home/sysops/falcon-sensor.rpm
+          when: ansible_distribution_major_version == "7"
+
+        - name: Copy RPM for CentOS/RHEL 8
+          copy:
+                  src: /home/sysops/falcon/falcon-sensor-6.19.0-11610.el8.x86_64.rpm
+                  dest: /home/sysops/falcon-sensor.rpm
+          when: ansible_distribution_major_version == "8"
+
+        - name: Install RPM
+          yum:
+                  name: /home/sysops/falcon-sensor.rpm
+                  state: present
+                  #disable_gpg_check: yes
+
+        - name: Configure CORE/LAN
+          shell: /opt/CrowdStrike/falconctl -s --cid=6DDDDB57BB684D219D41C93C368DC960-24
+
+        - name: restart falcon service on RHEL7 and 8
+          service:
+                  name: falcon-sensor
+                  enabled: yes
+                  state: started
+                  #when: ansible_distribution_major_version == "7" or ansible_distribution_major_version == "8"
+        
+                  # - name: restart falcon service on RHEL 6
+                  #service:
+                  #name: falcon-sensor
+                  #enabled: yes
+                  #state: started
+                  #when: ansible_distribution_major_version == "6"

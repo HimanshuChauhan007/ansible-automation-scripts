@@ -1,0 +1,15 @@
+- hosts: all 
+  connection: ssh
+  remote_user: sysops
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  tasks:
+    - name: update security packages 
+      yum: name="*" state=latest skip_broken=yes disable_gpg_check=yes
+    - name: restart system to reboot to newest kernel
+      shell: "sleep 5 && reboot"
+      async: 1
+      poll: 0
+
+

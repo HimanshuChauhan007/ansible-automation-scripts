@@ -1,0 +1,35 @@
+---
+  - hosts: grub2
+    connection: ssh
+    become: yes
+    remote_user: sysops
+    tasks:
+       - name: copy grub2 packages to destination
+         copy:
+           src: '{{ item }}'
+           dest: /home/sysops/
+         with_items:
+                 - /home/sysops/grub2-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-pc-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-common-2.02-0.87.el7_9.6.noarch.rpm
+                 - /home/sysops/grub2-pc-modules-2.02-0.87.el7_9.6.noarch.rpm
+                 - /home/sysops/grub2-tools-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-tools-extra-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-tools-minimal-2.02-0.87.el7_9.6.x86_64.rpm
+
+       - name: Install grub2 packages
+         yum:
+          name: '{{ item }}'
+          state: installed
+         with_items:
+                 - /home/sysops/grub2-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-pc-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-common-2.02-0.87.el7_9.6.noarch.rpm
+                 - /home/sysops/grub2-pc-modules-2.02-0.87.el7_9.6.noarch.rpm
+                 - /home/sysops/grub2-tools-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-tools-extra-2.02-0.87.el7_9.6.x86_64.rpm
+                 - /home/sysops/grub2-tools-minimal-2.02-0.87.el7_9.6.x86_64.rpm
+...
+
+
+

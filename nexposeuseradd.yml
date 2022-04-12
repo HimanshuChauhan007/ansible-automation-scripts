@@ -1,0 +1,28 @@
+---
+- name: Creating nexpose user for scan
+  hosts: all
+  remote_user: sysops
+  become: yes
+  tasks:
+  - name: Adding nexpose user
+    user:
+     name: nexpose
+     state: present
+     comment: GSO account
+
+  - name: Creating .ssh dir
+    file:
+     state: directory
+     path: /home/nexpose/.ssh
+     owner: nexpose
+     group: nexpose
+     mode: 0700
+
+  - name: Creating authorized key file and copying public key to .ssh dir
+    copy:
+     src: /home/sysops/key.txt
+     dest: /home/nexpose/.ssh/authorized_keys
+     owner: nexpose
+     group: nexpose
+     mode: 0600
+...

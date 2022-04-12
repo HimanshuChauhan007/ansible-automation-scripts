@@ -1,0 +1,16 @@
+del2lmsokbase
+deleavpubstlnt1
+delsusemanager
+DELVMPLLPMTOOL07
+DELVMPLLPMTOOL08
+delvmplrtoolscapex.sapient.com
+deleavpubstlnt2
+delvmplTecPT
+delvmplxVWD01
+inggneav170s1
+INGGNEAVSTLNT3
+inggneavstlnt5
+INGGNEAVSTLNT6
+inggnsclcmrspm1
+inggntdbssc0007
+inggntdbssc0008

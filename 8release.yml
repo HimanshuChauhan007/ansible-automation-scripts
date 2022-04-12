@@ -1,0 +1,14 @@
+---
+ - hosts: all
+   become: yes
+   tasks:
+      - name: Print for rhel 8 servers
+        shell: echo "This is rhel 8 server"
+        register: output
+
+      - debug:
+         var: output.stdout
+        when:
+          - ansible_facts['distribution_major_version'] == "8"
+...
+        

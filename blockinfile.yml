@@ -1,0 +1,23 @@
+- hosts: all
+  connection: ssh
+  remote_user: sysops
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  tasks:
+  - name: Adding block in /etc/hosts file
+    blockinfile:
+     path: /etc/hosts
+     block: |
+        10.202.42.91  INGGNTAPSSC0002.sapient.com  INGGNTAPSSC0002
+        10.202.42.90  INGGNTAPSSC0001.sapient.com  INGGNTAPSSC0001
+        10.202.42.92  INGGNTAPSSC0003.sapient.com  INGGNTAPSSC0003
+        10.202.42.93  INGGNTAPSSC0004.sapient.com  INGGNTAPSSC0004
+
+        10.148.3.20     inggnohsvip.sapient.com     inggnohsvip
+        10.148.3.17     inggnoamvip.sapient.com     inggnoamvip
+        10.148.3.19     inggneagvip.sapient.com     inggneagvip
+        10.148.3.18     inggnoidvip.sapient.com     inggnoidvip
+     backup: yes
+...
+

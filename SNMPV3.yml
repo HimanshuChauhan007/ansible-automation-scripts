@@ -1,0 +1,48 @@
+---
+- hosts: all
+  connection: ssh
+  remote_user: sysops
+  become: true
+  tasks:
+   - name: Install SNMP Package
+     yum:
+       name: 
+         - net-snmp-utils
+         - net-snmp 
+       state: present  
+   - name: Stop service snmpd
+     service:
+       name: snmpd 
+       state: stopped
+   - name: Physical Server HPSM RPM Check
+     yum:
+       list=hpsmh     
+     register: hp
+   - name: Debugs output   
+     debug:
+       var: hp
+   - name: Copy SNMP file
+     copy:
+       src: /tmp/snmpd_hp.conf
+       dest: /etc/snmp/snmpd.conf
+       backup: yes
+       owner: root
+       group: root
+       mode: '0644'
+     when: (hp.results|length == 1) 
+   - name: Copy SNMP file
+     copy:
+       src: /home/sysops/snmpd.conf
+       dest: /etc/snmp/snmpd.conf
+       backup: yes
+       owner: root
+       group: root
+       mode: '0644'
+     when: (hp.results|length == 0)
+   - name: SNMPV3 User Creation
+     command: 'net-snmp-create-v3-user -ro -A Pubtech123_ -X Pubtech123_ -a MD5 -x DES sgipnetv3'
+   - name: Start service snmpd
+     service:
+       name: snmpd
+       state: started
+       enabled: yes

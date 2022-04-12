@@ -1,0 +1,19 @@
+---
+  - hosts: localhost
+    tasks: 
+     - mail:
+        from: vikas.wariyal@lionresources.com     
+        subject: Please assign Incident
+        to: HelpDesk@publicissapient.com
+        body: 
+      
+         " Please assign one Incident to Global Linux team. This is to fix Vulnerabilities on the below servers.
+          
+         fredcpdbmdv0002 (81.200.188.114)
+
+         Thanks
+        
+         Global-Infra Linux Team"
+
+...
+      

@@ -1,0 +1,78 @@
+---
+  - hosts: localhost
+    tasks:
+     - mail:
+        from: nitin.saini@lionresources.com
+        subject: Please assign ticket
+        to: HelpDesk@publicissapient.com
+        body: '{{ item }}'
+
+       with_items:
+
+        - " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 16th September.
+           
+           fredcpapssc0240
+	   fredcpapssc0241
+	   na1prsapl2825v
+	   na1prsapl2826v
+	   inggnpwsssc0001
+	   inggnpwsssc0002 "
+
+
+        - " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 17th September.
+	   inggnpapssc0017
+	   inggnpapssc0018
+	   inggnpapssc0019
+	   inggnpapssc0020
+	   na1prsapl2822v
+	   na1prsapl2852v
+	   usaarpapssc0001
+	   usaarpapssc0002 "
+
+        - " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 18th September.
+
+	   fredcpapssc0248
+           fredcpapssc0252
+	   fredcpapssc0253
+	   fredcpclssc0036
+	   fredcpclssc0037
+	   fredcpdbmdv0001
+	   na1prsdbl2800
+	   na1prsdbl2799
+	   usaarpapmdv0001
+	   inggnpdbssc0001
+	   inggnpdbssc0002
+	   fredcpfsssc0047
+	   fredcpfsmdv0001
+	   fredcpapssc0254 "
+
+        - " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 20th September.
+ 
+	   fredcpapssc0245
+	   fredcpapssc0246
+	   FREDCPAPSSC0247 "
+
+
+        - " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 21st September.
+ 
+	   fredcpapssc0242
+	   fredcpapssc0243
+	   fredcpapssc0244 "
+
+
+        - " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 22nd September.
+	   fredcpapssc0249
+ 	   fredcpapssc0250
+	   fredcpapmdv0001 "
+ 
+	- " Please assign one ticket to Global Backup Team . This is to confirm the backup status of the below server before 6am IST 23rd September.
+	   fredcsapssc0128
+	   fredcpapssc0180
+	   fredcpapssc0124
+	   fredcpapssc0127
+	   FREDCPAPSSC0128
+	   fredcpapssc0231 "
+
+...
+
+

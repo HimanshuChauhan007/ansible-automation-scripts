@@ -1,0 +1,39 @@
+---
+ - hosts: all
+   connection: ssh
+   remote_user: sysops
+   become: yes
+   vars:
+     users:
+     - username: "harverma"
+     - username: "rickapoo"
+     - username: "prikashy"
+     - username: "harsharm6"
+     - username: "nismalho"
+     - username: "avikumar13"
+     - username: "paarawat"
+   tasks:
+     - name: DOJO GROUP CHECK and ADD
+       group:
+         name: DojoInfraApps
+         state: present
+     - name: useradd
+       user:
+         name: "{{item.username}}"
+         comment: REQ4456644
+         group: DojoInfraApps
+         password: $6$izxEHQ5PqDNbBnOy$RYWem9sxHBq4hdCwvRu2k5qc.mhAF44h4uWjwVAcbqz2Eibgy0vL7G2OPVeXzuvozyAB8NxErisk0PkAnmWNc/ 
+         update_password: on_create
+         state: present
+       with_items: "{{users}}"
+     - name: suoders entry
+       lineinfile:
+         path: /etc/sudoers
+         line: "%DojoInfraApps ALL = (ALL) NOPASSWD: ALL"
+         create: yes
+         backup: yes
+         validate: '/usr/sbin/visudo -cf %s'
+     - name: Password Policy
+       command: chage -M 90 -W 7 -d 0 "{{ item.username }}"
+       with_items: "{{users}}"
+           

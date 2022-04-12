@@ -1,0 +1,8 @@
+- hosts: all
+  connection: ssh
+  remote_user: sysops
+  become: true
+  tasks:
+    - name: Start FUSION
+      command: 'fusioninventory-agent --no-ssl-check'
+

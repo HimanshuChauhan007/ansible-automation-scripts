@@ -1,0 +1,10 @@
+---
+ - hosts: PROD
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks: 
+     - name: CPU INFO
+       shell: "dmidecode -t 4 | egrep -i 'core (count|enabled)|thread count|Version'" 
+       register: ps
+     - debug: var=ps.stdout_lines 

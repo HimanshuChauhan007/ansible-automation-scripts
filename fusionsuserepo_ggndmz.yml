@@ -1,0 +1,32 @@
+---
+ - hosts: all
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks: 
+     - name: install Fusion RPM
+       yum:
+         name:
+           - fusioninventory-agent
+           - fusioninventory-agent-task-inventory
+           - dmidecode
+         state: present
+         disable_gpg_check: yes
+     - name: enable fusion
+       service: 
+         name: fusioninventory-agent
+         enabled: yes
+     - name: copy agent file
+       template: 
+          src: /tmp/agent.cfg
+          dest: /etc/fusioninventory/agent.cfg
+          backup: yes
+          owner: root
+          group: root
+          mode: '0644'
+     - name: restart the fusioninventory-agent
+       service: 
+          name: fusioninventory-agent
+          state: restarted
+   
+     

@@ -1,0 +1,33 @@
+---
+  - hosts: localhost
+    tasks: 
+     - mail:
+        from: nitin.sharma@lionresources.com     
+        subject: HPE ILO Vulnerability fixit
+        to: HelpDesk@publicissapient.com
+        body: '{{ item }}'
+       
+       with_items:
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.196.37.190 "
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.196.37.210"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.196.37.230"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.199"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.207"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.221"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.40"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.59"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.80"
+
+          - " Please assigned ticket to GLOBAL-INFRA-DC-OPS-L1-L2 HPE ILO Vulnerablity on server 10.209.40.41.62"
+
+
+...

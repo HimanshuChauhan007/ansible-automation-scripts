@@ -1,0 +1,16 @@
+
+ - hosts: SMTP
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks:
+     - name: SMTP disable 
+       replace: 
+         path: /etc/postfix/main.cf
+         regexp: 'edcapplicationrelay.publicisgroupe.net'
+         replace: 'none'
+         backup: yes
+     - name: restart postfix
+       service: 
+         name: postfix
+         state: restarted 

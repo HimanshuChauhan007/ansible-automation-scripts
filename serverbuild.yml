@@ -1,0 +1,131 @@
+---
+- hosts: all
+  connection: ssh
+  remote_user: sysops
+  become: true
+  tasks:
+    - name: Disable Firewall
+      service:
+        name: firewalld
+        state: stopped
+        enabled: no
+    - name: Disable NetworkManager
+      service:
+        name: NetworkManager
+        state: stopped
+        enabled: no
+    - name: Selinux Disable
+      selinux:
+        state: disabled
+    - name: DNS Entry for GGN
+      template:
+        src: DNSGGN.j2
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Install SNMP Package
+      yum:
+        name: 
+          - net-snmp-utils
+          - net-snmp
+        disable_gpg_check: yes
+      ignore_errors: True
+    - name: Stop service snmpd
+      service:
+        name: snmpd
+        state: stopped
+      ignore_errors: True
+    - name: Copy SNMP File
+      template:
+        src: snmpd.conf.j2
+        dest: /etc/snmp/snmpd.conf
+        backup: yes
+        owner: root
+        group: root
+        mode: '0644'
+      ignore_errors: True
+    - name: SNMPV3 User Creation
+      command: 'net-snmp-create-v3-user -ro -A Pubtech123_ -X Pubtech123_ -a MD5 -x DES sgipnetv3'
+      ignore_errors: True
+    - name: Start SNMP Service
+      service:
+        name: snmpd
+        state: started
+        enabled: yes
+      ignore_errors: True
+    - name: lineadd for X11 Forwarding
+      lineinfile:
+        create: yes
+        backup: yes
+        path: /etc/ssh/sshd_config
+        line: "{{ item.line }}"
+      with_items:
+        - { line: '#####X11 Forwarding##### ' }
+        - { line: 'X11Forwarding yes ' }
+        - { line: 'X11DisplayOffset 10 ' }
+        - { line: 'X11UseLocalhost no ' }
+    - name: install X11 Specific Package
+      yum:
+        name:
+          - xorg-x11-apps*
+          - xorg-x11-server-Xorg
+          - xorg-x11-xauth
+          - xorg-x11-fonts-*
+        disable_gpg_check: yes
+      ignore_errors: True
+    - name: Remove VNC
+      yum:
+        name:
+          - libvncserver*
+          - tiger*
+        state: absent
+      ignore_errors: True
+    - name: install Fusion RPM
+      yum:
+        name:
+          - fusioninventory-agent
+          - fusioninventory-agent-task-inventory
+          - dmidecode
+        state: present
+        disable_gpg_check: yes
+      ignore_errors: True
+#   - name: enable fusion
+#      service:
+ #       name: fusioninventory-agent
+ #       enabled: yes
+ #     ignore_errors: True
+ #   - name: copy agent file
+ #     copy:
+ #        src: /etc/fusioninventory/agent.cfg
+ #        dest: /etc/fusioninventory/agent.cfg
+ #        backup: yes
+ #        owner: root
+ #        group: root
+ #        mode: '0644'
+ #     ignore_errors: True
+ #   - name: restart the fusioninventory-agent
+ #     service:
+ #        name: fusioninventory-agent
+ #        state: restarted
+ #     ignore_errors: True
+    - name: Adding nexpose user
+      user:
+        name: nexpose
+        state: present
+        comment: GSO account
+    - name: Creating .ssh dir
+      file:
+        state: directory
+        path: /home/nexpose/.ssh
+        owner: nexpose
+        group: nexpose
+        mode: 0700
+    - name: Copy Key File for Nexpose account
+      template:
+        src: nexpoe.j2
+        dest: /home/nexpose/.ssh/authorized_keys
+        owner: nexpose
+        group: nexpose
+        mode: '0600'
+

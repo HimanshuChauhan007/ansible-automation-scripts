@@ -1,0 +1,16 @@
+---
+- name: Patching as per CHG113808
+  hosts: backup
+  remote_user: sysops
+  become: yes
+  tasks:
+  #- name: Patching backup servers
+  #  yum:
+  #  name: '*'
+  #   security: yes
+  #   state: latest
+  - shell: rpm -qa --last | grep kernel
+    register: result
+  - debug:
+     var: result 
+...

@@ -1,0 +1,33 @@
+- hosts: all
+  connection: ssh
+  remote_user: sysops
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  tasks:
+    - name: update security packages
+      yum: name="*" security=yes state=latest skip_broken=yes disable_gpg_check=yes 
+      when: 
+        ansible_distribution == "RedHat" or  ansible_distribution == "CentOS"
+      notify:
+      - Reboot_Rhel_Centos
+
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      when:
+        ansible_distribution == "Ubuntu"
+     
+    - name: Upgrading Ubuntu Package
+      apt: upgrade=dist force_apt_get=yes
+      when:
+        ansible_distribution == "Ubuntu"
+      notify: 
+      - Reboot_Ubuntu
+  
+  handlers:
+    - name: Reboot_Rhel_Centos
+      reboot:
+
+    - name: Reboot_Ubuntu
+      reboot:
+

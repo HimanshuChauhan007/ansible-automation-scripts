@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: fetch ip address
+      command: 'cat /etc/hosts'
+      register: hosts
+...  

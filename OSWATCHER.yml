@@ -1,0 +1,27 @@
+ - hosts: oswbb
+   connection: ssh
+   remote_user: sysops
+   become: true
+   tasks: 
+     - name: Copy OS Watcher
+       copy:
+         src: "{{item.src}}"
+         dest: "{{item.dest}}"
+         mode: "{{item.mode}}"
+       with_items:
+         - { src: '/opt/osw-startup.sh' , dest: '/opt/osw-startup.sh' , mode: '0777' }
+         - { src: '/opt/oswbb812.tar' , dest: '/opt/oswbb812.tar' , mode: '0750' }
+     - name: Untar OSWatcher
+       unarchive: 
+         src: /opt/oswbb812.tar
+         dest: /opt/
+         remote_src: yes
+     - name: Startup Script
+       lineinfile:
+         path: /etc/rc.local
+         line: '/opt/osw-startup.sh'
+     - name: Start the Script
+       shell: /opt/osw-startup.sh >>/tmp/log.txt
+       async: 120
+     - name: Mode Change of rc.local
+       command: ' chmod +x /etc/rc.d/rc.local '

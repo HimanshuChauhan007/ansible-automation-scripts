@@ -1,0 +1,119 @@
+---
+- hosts: all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  tasks:
+
+    - name: Creating backup of /etc/ssh/sshd_config file in the remote servers
+      copy:
+       src: /etc/ssh/sshd_config
+       dest: /home/sysops/
+       remote_src: yes
+    
+    - name: creating test user
+      user:
+       name: ciphertest 
+       password: $6$ogoX3W1x86HiBfe8$2i/RyEP5sz9j4v8xf9YbBOlpiqdxZ9dCrPQp9VE3Z.m1yYJtOWJ/QSzxGdEYsgeRLVSabM9ijOl6uVxqjArw00
+       state: present
+       shell: /bin/bash
+       createhome: yes
+           
+    - name: RHEL 5 Edit /etc/ssh/sshd_config files in the server
+      lineinfile:
+       path: /etc/ssh/sshd_config
+       regexp: '{{item.From}}'
+       line: '{{item.To}}'
+       state: present
+       backup: yes
+       insertbefore: '^# To disable tunneled clear text passwords, change to no here!'
+       validate: '/usr/sbin/sshd -T -f %s'
+      with_items:
+       -  { From: '^Ciphers' , To: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'}
+       -  { From: '^MACs' ,    To: 'MACs hmac-sha1,hmac-ripemd160'}
+       -  { From: '^KexAlgorithms' , To: 'KexAlgorithms diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha256'}
+      when:
+       ansible_distribution_major_version == "5"
+      notify:
+       - Restart 5sshd
+
+
+    - name : RHEL 6 Edit /etc/ssh/sshd_config files in the server
+      lineinfile:
+       path: /etc/ssh/sshd_config
+       regexp: '{{item.From}}'
+       line: '{{item.To}}'
+       state: present
+       backup: yes
+       insertbefore: '^# To disable tunneled clear text passwords, change to no here!'
+       validate: '/usr/sbin/sshd -T -f %s'
+      with_items: 
+       -  { From: '^Ciphers' , To: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr'}
+       -  { From: '^MACs' ,    To: 'MACs hmac-sha1,umac-64@openssh.com,hmac-ripemd160,hmac-sha2-256,hmac-sha2-512,hmac-ripemd160@openssh.com'}
+       -  { From: '^KexAlgorithms' , To: 'KexAlgorithms diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha256'}
+      when:
+       ansible_distribution_major_version == "6"
+      notify:
+       - Restart sshd
+      
+    - name: RHEL 7 Edit /etc/ssh/sshd_config files in the server
+      lineinfile:
+       path: /etc/ssh/sshd_config
+       regexp: '{{item.From}}'
+       line: '{{item.To}}'
+       state: present
+       backup: yes
+       insertbefore: '^# To disable tunneled clear text passwords, change to no here!'
+       validate: '/usr/sbin/sshd -T -f %s'
+      with_items:   
+       - { From: '^Ciphers' , To: 'Ciphers chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com'}
+       - { From: '^MACs' , To: 'MACs umac-64-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha1-etm@openssh.com,umac-64@openssh.com,umac-128@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1,hmac-sha1-etm@openssh.com'}
+       - { From: '^KexAlgorithms' , To: 'KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1'}
+      when:
+          ansible_distribution_major_version == "7"
+      notify:
+       - SSHD restart
+    
+    - name: RHEL 8 Edit /etc/ssh/sshd_config files in the server
+      lineinfile:
+       path: /etc/sysconfig/sshd
+       regexp: '^# CRYPTO_POLICY='
+       line: CRYPTO_POLICY=
+       state: present
+       backup: yes
+      when:
+          ansible_distribution_major_version =="8"
+
+    - name: RHEL 8 Edit /etc/ssh/sshd_config files in the server
+      lineinfile:
+       path: /etc/ssh/sshd_config
+       regexp: '{{item.From}}'
+       line: '{{item.To}}'
+       state: present
+       backup: yes
+       validate: '/usr/sbin/sshd -T -f %s'
+      with_items:
+       - { From: '^Ciphers' , To: 'Ciphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr'}
+       - { From: '^MACs' , To: 'MACs=hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,umac-128@openssh.com,hmac-sha2-512'}
+       - { From: '^KexAlgorithms' , To: 'KexAlgorithms=curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1'}
+      when:
+          ansible_distribution_major_version == "8"
+      notify:
+       - SSHD8 restart
+ 
+  handlers: 
+    - name: SSHD8 restart
+      service: 
+       name: sshd
+       state: restarted
+
+    - name: Restart sshd
+      service:
+       name: sshd
+       state: restarted
+   
+    - name: SSHD restart
+      service: 
+       name: sshd
+       state: restarted
+...

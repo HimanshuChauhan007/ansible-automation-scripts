@@ -1,0 +1,42 @@
+---
+  - hosts: localhost
+    tasks: 
+     - mail:
+        from: nitin.saini@lionresources.com     
+        subject: Please assign Incident to Linux Team
+        to: SapeCloud-Support@publicissapient.com
+        body: '{{ item }}'
+       
+       with_items:
+
+        
+        - " Please assign this ticket to Global Linux Team. This is to reset the password on 10.196.54.24
+         userid id deepande3 "
+
+        - " Please assign one ticket to Global Linux Team to fix the vulnerbility on server
+          10.196.54.24 "
+
+        - " Please assign one ticket to Global Linux Team . This is for performing the cloning activity on.
+          DELORA12DB1 "
+
+        - " Please assign one ticket to Global Linux Team . This is for performing cloning activity on server
+          DELORA12DB2 "
+
+        - " Please assign one ticket to Global Linux Team . This is to perform the housekeeping on /var on server
+         inggnitossc0004 "
+       
+        - " Please assign one ticket to Global Linux Team . This is to fix the vulnerbility on server.
+          fredcpapssc0111 "
+            
+        - " Please assign one ticket to Global Linux Team . This is to perform housekeeping on /mnt/backup
+          fredcpapssc0252 "
+
+        - " Please assign one ticket to Global Linux Team . This is to fix vulnerbility on server.
+           10.196.52.47 "
+
+        - " Please assign one ticket to Global Linux Team . This is to perform the house keeping on /app on server.
+          fredcsapssc0022 "
+
+        - " Please assign one ticket to Global Linux Team . This is to fix vulnerbility on the server.
+              na1prsapl2853v "
+...

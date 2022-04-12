@@ -1,0 +1,12 @@
+---
+   - name: removing firefox
+     hosts: firefox
+     become: yes
+     tasks:
+      - name: remove
+        yum:
+         name: firefox
+         state: absent
+
+...
+   

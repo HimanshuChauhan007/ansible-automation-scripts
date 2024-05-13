@@ -22,7 +22,7 @@
          name: "{{item.username}}"
          comment: REQ4456644
          group: DojoInfraApps
-         password: $6$izxEHQ5PqDNbBnOy$RYWem9sxHBq4hdCwvRu2k5qc.mhAF44h4uWjwVAcbqz2Eibgy0vL7G2OPVeXzuvozyAB8NxErisk0PkAnmWNc/ 
+         password: 
          update_password: on_create
          state: present
        with_items: "{{users}}"
